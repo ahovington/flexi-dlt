@@ -1,0 +1,24 @@
+# When a pull request is opened, updated or merged, run the lint actions.
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened, closed, edited ]
+    branches:
+      - main
+
+concrrency:
+  group: ${{ github.workflow }}-${{ gihub.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out code
+        uses: actions/checkout@v3
+
+      - name: Requirements
+        run: make requirements-test
+
+      - name: Python lint and formatting checks
+        run: make check
+

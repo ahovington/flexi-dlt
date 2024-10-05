@@ -1,7 +1,7 @@
 [project]
-name = "DataLoadTool"
+name = "FlexiDLT"
 version = "0.1.0"
-description = "Extract and load data from and too multiple dbs"
+description = "Easily extract and load data from and too multiple databases"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -10,7 +10,11 @@ dependencies = [
     "pymysql~=1.1.1",
     "python-dotenv~=1.0.1",
     "sqlalchemy~=2.0.0",
-    "toml~=0.10.2",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.6.9",
 ]
 
 [tool.ruff.lint]
