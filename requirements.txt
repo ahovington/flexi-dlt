@@ -1,0 +1,7 @@
+dlt[snowflake]~=1.1.0
+dlt[postgres]~=1.1.0
+pymysql~=1.1.1
+sqlalchemy~=2.0.0
+toml~=0.10.2
+psutil~=6.0.0
+python-dotenv~=1.0.1

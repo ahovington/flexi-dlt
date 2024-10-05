@@ -1,0 +1,30 @@
+[project]
+name = "DataLoadTool"
+version = "0.1.0"
+description = "Extract and load data from and too multiple dbs"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "dlt[postgres,snowflake]~=1.1.0",
+    "psutil~=6.0.0",
+    "pymysql~=1.1.1",
+    "python-dotenv~=1.0.1",
+    "sqlalchemy~=2.0.0",
+    "toml~=0.10.2",
+]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]

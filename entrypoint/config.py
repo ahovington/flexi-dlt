@@ -1,0 +1,94 @@
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass
+from enum import StrEnum
+from pathlib import Path
+from urllib.parse import quote_plus
+
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=Path(".env"))
+
+SECRETS_PATH = Path(".dlt") / "secrets.toml"
+os.remove(SECRETS_PATH)
+
+
+class LoadType(StrEnum):
+    Full = "Full Load"
+    Incremental = "Incremental"
+
+
+def _create_secrets(
+    secret_type: str, database_type: str, connection_params: dict[str, str]
+) -> None:
+    """Create the secrets toml file for the source and destination databases.
+
+    Args:
+        secret_type (str): The type of the secret, either sources or destination.
+        database_type (str): The type of the database, example mysql, Bigquery.
+        connection_params (dict[str, str]): A dictionary of the connection parameters.
+    """
+    SECRETS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    secrets = [f"[{secret_type}.{database_type}.credentials]\n"]
+    for key, secret in connection_params.items():
+        if key != "port":
+            secrets += [f'{key} = "{secret}"\n']
+            continue
+        secrets += [f"{key} = {secret}\n"]
+    secrets += [""]
+    open_mode = "w"
+    if SECRETS_PATH.exists():
+        open_mode = "a"
+    with SECRETS_PATH.open(open_mode, encoding="utf-8") as f:
+        f.writelines(secrets)
+
+
+@dataclass
+class Source:
+    name: str
+    database_type: str
+    connection_params: dict[str, str]
+    tables: list[Table]
+
+    @dataclass
+    class Table:
+        name: str
+        schema: str
+        load_type: LoadType
+        historical_years: int
+        update_ts: str | None = None
+        include_cols: list[str] | None = None
+        exclude_cols: list[str] | None = None
+
+    def create_secrets(self):
+        _create_secrets(
+            "sources",
+            self.database_type,
+            self.connection_params,
+        )
+
+    @property
+    def db_url(self) -> str:
+        """Generate the url of the database.
+
+        Returns:
+            str: The database url.
+        """
+        return f"""postgresql://{self.connection_params["username"]}:{quote_plus(self.connection_params["password"])}@{self.connection_params["host"]}/{self.connection_params["database"]}"""
+
+
+@dataclass
+class Destination:
+    name: str
+    database_type: str
+    connection_params: dict[str, str]
+    schema: str
+    table_prefix: str = "src_"
+
+    def create_secrets(self):
+        _create_secrets(
+            "destination",
+            self.database_type,
+            self.connection_params,
+        )
