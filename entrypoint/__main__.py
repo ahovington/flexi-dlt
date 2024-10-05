@@ -1,7 +1,7 @@
 import os
 
 from .config import Destination
-from .load_pipeline import extract_load
+from .pipeline import extract_load
 from .src_hockey import hockey_source
 
 destination = Destination(
