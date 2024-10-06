@@ -167,37 +167,6 @@ wheels = [
 ]
 
 [[package]]
-name = "dataloadtool"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "dlt", extra = ["postgres", "snowflake"] },
-    { name = "psutil" },
-    { name = "pymysql" },
-    { name = "python-dotenv" },
-    { name = "sqlalchemy" },
-    { name = "toml" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "dlt", extras = ["postgres", "snowflake"], specifier = "~=1.1.0" },
-    { name = "psutil", specifier = "~=6.0.0" },
-    { name = "pymysql", specifier = "~=1.1.1" },
-    { name = "python-dotenv", specifier = "~=1.0.1" },
-    { name = "sqlalchemy", specifier = "~=2.0.0" },
-    { name = "toml", specifier = "~=0.10.2" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "ruff", specifier = ">=0.6.9" }]
-
-[[package]]
 name = "dlt"
 version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -250,6 +219,35 @@ sdist = { url = "https://files.pythonhosted.org/packages/9d/db/3ef5bb276dae18d6e
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b9/f8/feced7779d755758a52d1f6635d990b8d98dc0a29fa568bbe0625f18fdf3/filelock-3.16.1-py3-none-any.whl", hash = "sha256:2082e5703d51fbf98ea75855d9d5527e33d8ff23099bec374a134febee6946b0", size = 16163 },
 ]
+
+[[package]]
+name = "flexidlt"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "dlt", extra = ["postgres", "snowflake"] },
+    { name = "psutil" },
+    { name = "pymysql" },
+    { name = "python-dotenv" },
+    { name = "sqlalchemy" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "dlt", extras = ["postgres", "snowflake"], specifier = "~=1.1.0" },
+    { name = "psutil", specifier = "~=6.0.0" },
+    { name = "pymysql", specifier = "~=1.1.1" },
+    { name = "python-dotenv", specifier = "~=1.0.1" },
+    { name = "sqlalchemy", specifier = "~=2.0.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ruff", specifier = ">=0.6.9" }]
 
 [[package]]
 name = "fsspec"
@@ -912,15 +910,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/e9/71/36c74bab3d4e4385d31610b367da1535a36d17358df058e0920a7510e17c/time_machine-2.15.0-cp313-cp313-win32.whl", hash = "sha256:29b988b1f09f2a083b12b6b054787b799ae91ee15bb0e9de3e48f880e4d68674", size = 19397 },
     { url = "https://files.pythonhosted.org/packages/a4/69/ea5976c43a673894f2fa85a05b28a610b474472f393e59722a6946f7070b/time_machine-2.15.0-cp313-cp313-win_amd64.whl", hash = "sha256:d828721dcbcb94b904a6b25df67c2513ecd24cd9e36694f38b9f0fa71c7c6103", size = 20242 },
     { url = "https://files.pythonhosted.org/packages/cc/c8/26367d0b8dfaf7445576fe0051bff61b8f5be752e7bf3e8807ed7fa3a343/time_machine-2.15.0-cp313-cp313-win_arm64.whl", hash = "sha256:008bd668d933b1a029c81805bcdc0132390c2545b103cf8e6709e3adbc37989d", size = 18337 },
-]
-
-[[package]]
-name = "toml"
-version = "0.10.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f", size = 22253 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b", size = 16588 },
 ]
 
 [[package]]
