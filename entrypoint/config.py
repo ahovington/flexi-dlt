@@ -4,7 +4,6 @@ import os
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
-from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
 
