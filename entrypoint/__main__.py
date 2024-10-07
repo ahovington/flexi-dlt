@@ -1,3 +1,5 @@
+import os
+
 from .config import Destination, Source, Table
 from .destinations import dest_duckdb, dest_snowflake
 from .pipeline import extract_load
@@ -9,11 +11,13 @@ CONFIGURED_SOURCE = "HOCKEY"
 CONFIGURED_TABLES = "HOCKEY"
 
 
+source: dict[str, Source] = {"POSTGRES": srcPostgresHockey}[
+    os.getenv("SOURCE_DATABASE")
+]
 destination: dict[str, Destination] = {
     "SNOWFLAKE": dest_snowflake(),
     "DUCKDB": dest_duckdb(),
-}.get(CONFIGURED_DESTINATION)
-source: dict[str, Source] = {"HOCKEY": srcPostgresHockey}.get(CONFIGURED_SOURCE)
-tables: list[Table] = {"HOCKEY": tablesHockey}.get(CONFIGURED_TABLES)
+}[os.getenv("TARGET_DATABASE")]
+tables: list[Table] = {"HOCKEY": tablesHockey}[os.getenv("TABLES")]
 
 extract_load(destination, source, tables)

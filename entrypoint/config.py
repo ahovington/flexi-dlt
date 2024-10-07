@@ -4,7 +4,6 @@ import os
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
-from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
 
@@ -61,15 +60,6 @@ class Source:
             self.database_type,
             self.connection_params,
         )
-
-    @property
-    def db_url(self) -> str:
-        """Generate the url of the database.
-
-        Returns:
-            str: The database url.
-        """
-        return f"""postgresql://{self.connection_params["username"]}:{quote_plus(self.connection_params["password"])}@{self.connection_params["host"]}/{self.connection_params["database"]}"""
 
 
 @dataclass
