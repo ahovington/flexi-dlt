@@ -35,7 +35,7 @@ def dest_duckdb():
     return Destination(
         name="DuckDB",
         database_type=dlt.destinations.duckdb(
-            duckdb.connect(Path("./tests/dest_duckdb.duckdb"))
+            duckdb.connect(Path("./dest_duckdb.duckdb"))
         ),
         connection_params={},
         schema="main",
