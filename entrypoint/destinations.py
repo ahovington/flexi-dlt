@@ -3,6 +3,7 @@ from pathlib import Path
 
 import dlt
 import duckdb
+
 from .config import Destination
 from .errors import MissingEnvironemntVariable
 

@@ -1,5 +1,5 @@
 from .config import Destination, Source, Table
-from .destinations import dest_snowflake, dest_duckdb
+from .destinations import dest_duckdb, dest_snowflake
 from .pipeline import extract_load
 from .sources import srcPostgresHockey
 from .src_hockey import tablesHockey
