@@ -62,15 +62,6 @@ class Source:
             self.connection_params,
         )
 
-    @property
-    def db_url(self) -> str:
-        """Generate the url of the database.
-
-        Returns:
-            str: The database url.
-        """
-        return f"""postgresql://{self.connection_params["username"]}:{quote_plus(self.connection_params["password"])}@{self.connection_params["host"]}/{self.connection_params["database"]}"""
-
 
 @dataclass
 class Destination:
