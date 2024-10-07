@@ -5,10 +5,10 @@ from dlt.common import pendulum
 from dlt.sources.credentials import ConnectionStringCredentials
 from dlt.sources.sql_database import sql_table
 
-from .config import Destination, LoadType, Source
+from .config import Destination, LoadType, Source, Table
 
 
-def extract_load(destination: Destination, source: Source) -> None:
+def extract_load(destination: Destination, source: Source, tables: list[Table]) -> None:
     """Extract and load data from source to destination.
 
     Args:
@@ -16,6 +16,10 @@ def extract_load(destination: Destination, source: Source) -> None:
         source (Source): The config for the source database with table configs.
     """
     logging.info("Starting extract load")
+    # Credentials for the source and target database.
+    # TODO: replace with .dlt/secrets.toml by calling `source.create_secrets()``
+    credentials = ConnectionStringCredentials(source.db_url)
+    destination.create_secrets()
     # Create a pipeline
     pipeline = dlt.pipeline(
         pipeline_name=destination.name,
@@ -24,12 +28,9 @@ def extract_load(destination: Destination, source: Source) -> None:
         progress="log",
     )
 
-    # Credentials for the source database.
-    credentials = ConnectionStringCredentials(source.db_url)
-
     incremental_load = []
     full_load = []
-    for table in source.tables:
+    for table in tables:
         if table.load_type == LoadType.Incremental:
             start_date = pendulum.now().subtract(years=table.historical_years)
             end_date = pendulum.now()

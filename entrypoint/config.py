@@ -11,7 +11,9 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path=Path(".env"))
 
 SECRETS_PATH = Path(".dlt") / "secrets.toml"
-os.remove(SECRETS_PATH)
+if SECRETS_PATH.exists():
+    # Flush secrets if they exists
+    os.remove(SECRETS_PATH)
 
 
 class LoadType(StrEnum):
@@ -49,19 +51,11 @@ class Source:
     name: str
     database_type: str
     connection_params: dict[str, str]
-    tables: list[Table]
-
-    @dataclass
-    class Table:
-        name: str
-        schema: str
-        load_type: LoadType
-        historical_years: int
-        update_ts: str | None = None
-        include_cols: list[str] | None = None
-        exclude_cols: list[str] | None = None
+    generate_secrets: bool = True
 
     def create_secrets(self):
+        if not self.generate_secrets:
+            return
         _create_secrets(
             "sources",
             self.database_type,
@@ -85,10 +79,24 @@ class Destination:
     connection_params: dict[str, str]
     schema: str
     table_prefix: str = "src_"
+    generate_secrets: bool = True
 
     def create_secrets(self):
+        if not self.generate_secrets:
+            return
         _create_secrets(
             "destination",
             self.database_type,
             self.connection_params,
         )
+
+
+@dataclass
+class Table:
+    name: str
+    schema: str
+    load_type: LoadType
+    historical_years: int
+    update_ts: str | None = None
+    include_cols: list[str] | None = None
+    exclude_cols: list[str] | None = None
