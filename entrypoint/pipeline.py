@@ -2,7 +2,6 @@ import logging
 
 import dlt
 from dlt.common import pendulum
-from dlt.sources.credentials import ConnectionStringCredentials
 from dlt.sources.sql_database import sql_table
 
 from .config import Destination, LoadType, Source, Table
@@ -17,8 +16,7 @@ def extract_load(destination: Destination, source: Source, tables: list[Table]) 
     """
     logging.info("Starting extract load")
     # Credentials for the source and target database.
-    # TODO: replace with .dlt/secrets.toml by calling `source.create_secrets()``
-    credentials = ConnectionStringCredentials(source.db_url)
+    source.create_secrets()
     destination.create_secrets()
     # Create a pipeline
     pipeline = dlt.pipeline(
@@ -36,7 +34,6 @@ def extract_load(destination: Destination, source: Source, tables: list[Table]) 
             end_date = pendulum.now()
             incremental_load += [
                 sql_table(
-                    credentials=credentials,
                     table=table.name,
                     incremental=dlt.sources.incremental(
                         table.update_ts,
@@ -53,7 +50,6 @@ def extract_load(destination: Destination, source: Source, tables: list[Table]) 
         if table.load_type == LoadType.Full:
             full_load += [
                 sql_table(
-                    credentials=credentials,
                     table=table.name,
                     chunk_size=10,
                     reflection_level="full_with_precision",
