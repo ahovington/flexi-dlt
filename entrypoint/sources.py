@@ -14,3 +14,11 @@ srcPostgresHockey = Source(
         "port": 5432,
     },
 )
+
+
+srcDuckdb = Source(
+    name="DuckDB",
+    database_type="duckdb",
+    connection_params={},
+    generate_secrets=False,
+)

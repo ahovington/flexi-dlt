@@ -1,18 +1,21 @@
 import logging
+from pathlib import Path
 
 import dlt
+import duckdb
 from dlt.common import pendulum
 from dlt.sources.sql_database import sql_table
 
 from .config import Destination, LoadType, Source, Table
 
 
-def extract_load(destination: Destination, source: Source, tables: list[Table]) -> None:
+def extract_load(source: Source, destination: Destination, tables: list[Table]) -> None:
     """Extract and load data from source to destination.
 
     Args:
+        source (Source): The config for the source database.
         destination (Destination): The config for the destination database.
-        source (Source): The config for the source database with table configs.
+        tables (list[Table]): A list of tables to load from the source to the destination.
     """
     logging.info("Starting extract load")
     # Credentials for the source and target database.
@@ -29,6 +32,13 @@ def extract_load(destination: Destination, source: Source, tables: list[Table]) 
     incremental_load = []
     full_load = []
     for table in tables:
+        if source.database_type.lower() == "duckdb":
+            conn = duckdb.connect(Path("./src_duckdb.duckdb"))
+            pipeline.run(
+                conn.sql(f"""select * from {table.name}""").df(),
+                table_name=table.name,
+            )
+            continue
         if table.load_type == LoadType.Incremental:
             start_date = pendulum.now().subtract(years=table.historical_years)
             end_date = pendulum.now()
@@ -57,6 +67,8 @@ def extract_load(destination: Destination, source: Source, tables: list[Table]) 
                     included_columns=table.include_cols,
                 )
             ]
-    # The merge write disposition merges existing rows in the destination by primary key
-    info = pipeline.run(incremental_load + full_load, write_disposition="merge")
-    print(info)
+    full_load = incremental_load + full_load
+    if full_load:
+        # The merge write disposition merges existing rows in the destination by primary key
+        info = pipeline.run(full_load, write_disposition="merge")
+        print(info)

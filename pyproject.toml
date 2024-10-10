@@ -5,8 +5,10 @@ description = "Easily extract and load data from and too multiple databases"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "dlt[duckdb,postgres,snowflake]~=1.1.0",
+    "dlt[duckdb,postgres,snowflake,parquet]~=1.1.0",
     "duckdb~=1.1.0",
+    "numpy>=2.1.2",
+    "pandas>=2.2.3",
     "psutil~=6.0.0",
     "pymysql~=1.1.1",
     "python-dotenv~=1.0.1",
@@ -16,20 +18,15 @@ dependencies = [
 [tool.uv]
 dev-dependencies = [
     "ruff>=0.6.9",
+    "pytest>=8.3.1",
 ]
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+    "E",   # pycodestyle
+    "F",   # Pyflakes
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I",   # isort
 ]
